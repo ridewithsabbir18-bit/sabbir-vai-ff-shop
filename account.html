@@ -7,81 +7,150 @@
 <title>My Account - SABBIR VAI FF SHOP</title>
 
 <style>
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: Arial, sans-serif;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
-body {
-background: #0b1020;
-color: white;
+body{
+background:#0b1020;
+color:white;
 }
 
-.header {
-padding: 20px 7%;
-background: #11182d;
-border-bottom: 1px solid #27304a;
-display: flex;
-justify-content: space-between;
-align-items: center;
+.header{
+padding:18px 6%;
+background:#11182d;
+border-bottom:1px solid #27304a;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-.logo {
-font-size: 22px;
-font-weight: bold;
+.logo{
+font-size:20px;
+font-weight:bold;
 }
 
-.home-btn {
-color: white;
-text-decoration: none;
+.home-btn{
+color:white;
+text-decoration:none;
+background:#202a46;
+padding:9px 16px;
+border-radius:7px;
 }
 
-.account {
-min-height: 80vh;
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 30px 20px;
+.container{
+width:94%;
+max-width:1000px;
+margin:30px auto;
 }
 
-.account-box {
-width: 100%;
-max-width: 420px;
-background: #171f35;
-padding: 30px;
-border-radius: 12px;
-border: 1px solid #293452;
-text-align: center;
+.welcome{
+background:linear-gradient(135deg,#171f35,#202b4a);
+border:1px solid #293452;
+border-radius:14px;
+padding:25px;
+margin-bottom:20px;
 }
 
-.account-box h2 {
-margin-bottom: 25px;
+.welcome h2{
+margin-bottom:8px;
 }
 
-.email {
-color: #b8c0d9;
-margin-bottom: 25px;
-word-break: break-word;
+.welcome p{
+color:#aeb8d2;
+word-break:break-word;
 }
 
-.btn {
-width: 100%;
-padding: 14px;
-background: #ffb703;
-color: #111;
-border: none;
-border-radius: 8px;
-font-weight: bold;
-cursor: pointer;
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:18px;
 }
 
-footer {
-text-align: center;
-padding: 25px;
-color: #8e98b5;
-background: #080c18;
+.card{
+background:#171f35;
+border:1px solid #293452;
+border-radius:14px;
+padding:22px;
+}
+
+.card h3{
+margin-bottom:18px;
+font-size:18px;
+}
+
+.info{
+display:flex;
+justify-content:space-between;
+gap:15px;
+padding:12px 0;
+border-bottom:1px solid #293452;
+}
+
+.info:last-child{
+border-bottom:none;
+}
+
+.label{
+color:#8e98b5;
+}
+
+.value{
+text-align:right;
+word-break:break-word;
+}
+
+.status{
+color:#20df8a;
+font-weight:bold;
+}
+
+.btn{
+width:100%;
+padding:13px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+background:#ffb703;
+color:#111;
+font-weight:bold;
+cursor:pointer;
+}
+
+.logout{
+background:#e63946;
+color:white;
+}
+
+.empty{
+color:#8e98b5;
+text-align:center;
+padding:15px 0;
+}
+
+footer{
+text-align:center;
+padding:25px;
+margin-top:30px;
+color:#8e98b5;
+background:#080c18;
+}
+
+@media(max-width:700px){
+.grid{
+grid-template-columns:1fr;
+}
+
+.header{
+padding:16px 5%;
+}
+
+.logo{
+font-size:17px;
+}
 }
 </style>
 </head>
@@ -90,69 +159,219 @@ background: #080c18;
 
 <header class="header">
 
-<div class="logo">🔥 SABBIR VAI FF SHOP</div>
+<div class="logo"> SABBIR VAI FF SHOP</div>
 
 <a href="index.html" class="home-btn">Home</a>
 
 </header>
 
-<section class="account">
 
-<div class="account-box">
+<main class="container">
 
-<h2>My Account</h2>
+<div class="welcome">
 
-<p class="email" id="userEmail">
-Loading...
-</p>
+<h2> Welcome to My Account</h2>
 
-<button class="btn" onclick="logout()">
+<p id="welcomeEmail">Loading...</p>
+
+</div>
+
+
+<div class="grid">
+
+
+<!-- PROFILE -->
+
+<div class="card">
+
+<h3> Profile</h3>
+
+<div class="info">
+<span class="label">Email</span>
+<span class="value" id="userEmail">Loading...</span>
+</div>
+
+<div class="info">
+<span class="label">Customer ID</span>
+<span class="value" id="customerId">Loading...</span>
+</div>
+
+<div class="info">
+<span class="label">Account Created</span>
+<span class="value" id="accountCreated">Loading...</span>
+</div>
+
+<button class="btn" onclick="changePassword()">
+Change Password
+</button>
+
+<button class="btn logout" onclick="logout()">
 Logout
 </button>
 
 </div>
 
-</section>
+
+<!-- MY ORDERS -->
+
+<div class="card">
+
+<h3> My Orders</h3>
+
+<div class="empty">
+No orders yet.
+</div>
+
+</div>
+
+
+<!-- ACTIVE PRODUCTS -->
+
+<div class="card">
+
+<h3> Active Products</h3>
+
+<div class="empty">
+No active products yet.
+</div>
+
+</div>
+
+
+<!-- PAYMENT HISTORY -->
+
+<div class="card">
+
+<h3> Payment History</h3>
+
+<div class="empty">
+No payment history yet.
+</div>
+
+</div>
+
+
+</div>
+
+</main>
+
 
 <footer>
 © 2026 SABBIR VAI FF SHOP. All rights reserved.
 </footer>
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co";
+const SUPABASE_URL =
+"https://lqwysworzitvulwpbvwe.supabase.co";
 
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
+
 
 const supabaseClient = supabase.createClient(
 SUPABASE_URL,
 SUPABASE_PUBLISHABLE_KEY
 );
 
-async function checkUser() {
+
+// CHECK USER
+
+async function checkUser(){
 
 const { data: sessionData } =
 await supabaseClient.auth.getSession();
 
-if (!sessionData.session) {
-window.location.href = "login.html";
+if(!sessionData.session){
+
+window.location.href="login.html";
+return;
+
+}
+
+const user =
+sessionData.session.user;
+
+
+// EMAIL
+
+document.getElementById("userEmail").innerText =
+user.email || "N/A";
+
+document.getElementById("welcomeEmail").innerText =
+user.email || "N/A";
+
+
+// CUSTOMER ID
+
+document.getElementById("customerId").innerText =
+user.id;
+
+
+// ACCOUNT CREATED
+
+if(user.created_at){
+
+const date =
+new Date(user.created_at);
+
+document.getElementById("accountCreated").innerText =
+date.toLocaleDateString();
+
+}
+
+}
+
+
+// CHANGE PASSWORD
+
+async function changePassword(){
+
+const newPassword =
+prompt("Enter your new password:");
+
+if(!newPassword){
 return;
 }
 
-const user = sessionData.session.user;
+if(newPassword.length < 6){
 
-document.getElementById("userEmail").innerText =
-user.email;
+alert("Password must be at least 6 characters.");
+return;
+
 }
 
-async function logout() {
+const { error } =
+await supabaseClient.auth.updateUser({
+password:newPassword
+});
+
+if(error){
+
+alert(error.message);
+
+}else{
+
+alert("Password changed successfully!");
+
+}
+
+}
+
+
+// LOGOUT
+
+async function logout(){
 
 await supabaseClient.auth.signOut();
 
-window.location.href = "index.html";
+window.location.href="index.html";
+
 }
+
 
 checkUser();
 
