@@ -1,234 +1,153 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
-  <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Login - SABBIR VAI FF SHOP</title>
-
-  <style>
-
-    * {
-
-      margin: 0;
-
-      padding: 0;
-
-      box-sizing: border-box;
-
-      font-family: Arial, sans-serif;
-
-    }
-
-    body {
-
-      min-height: 100vh;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      background: #111827;
-
-      padding: 20px;
-
-    }
-
-    .login-box {
-
-      width: 100%;
-
-      max-width: 400px;
-
-      background: #1f2937;
-
-      padding: 30px;
-
-      border-radius: 16px;
-
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-
-    }
-
-    h2 {
-
-      color: white;
-
-      text-align: center;
-
-      margin-bottom: 25px;
-
-    }
-
-    input {
-
-      width: 100%;
-
-      padding: 14px;
-
-      margin-bottom: 15px;
-
-      border: 1px solid #374151;
-
-      border-radius: 8px;
-
-      background: #111827;
-
-      color: white;
-
-      outline: none;
-
-    }
-
-    input:focus {
-
-      border-color: #22c55e;
-
-    }
-
-    button {
-
-      width: 100%;
-
-      padding: 14px;
-
-      border: none;
-
-      border-radius: 8px;
-
-      background: #22c55e;
-
-      color: white;
-
-      font-size: 16px;
-
-      font-weight: bold;
-
-      cursor: pointer;
-
-    }
-
-    button:hover {
-
-      background: #16a34a;
-
-    }
-
-    button:disabled {
-
-      opacity: 0.6;
-
-      cursor: not-allowed;
-
-    }
-
-    #message {
-
-      text-align: center;
-
-      margin-top: 15px;
-
-      color: #fbbf24;
-
-      font-size: 14px;
-
-    }
-
-    .signup {
-
-      text-align: center;
-
-      color: #d1d5db;
-
-      margin-top: 20px;
-
-    }
-
-    .signup a {
-
-      color: #22c55e;
-
-      text-decoration: none;
-
-      font-weight: bold;
-
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login - SABBIR VAI FF SHOP</title>
+
+<style>
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+
+body {
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+background: #111827;
+padding: 20px;
+}
+
+.login-box {
+width: 100%;
+max-width: 400px;
+background: #1f2937;
+padding: 30px;
+border-radius: 16px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+h2 {
+color: white;
+text-align: center;
+margin-bottom: 25px;
+}
+
+input {
+width: 100%;
+padding: 14px;
+margin-bottom: 15px;
+border: 1px solid #374151;
+border-radius: 8px;
+background: #111827;
+color: white;
+outline: none;
+}
+
+input:focus {
+border-color: #22c55e;
+}
+
+button {
+width: 100%;
+padding: 14px;
+border: none;
+border-radius: 8px;
+background: #22c55e;
+color: white;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+}
+
+button:hover {
+background: #16a34a;
+}
+
+button:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+}
+
+#message {
+text-align: center;
+margin-top: 15px;
+color: #fbbf24;
+font-size: 14px;
+}
+
+.signup {
+text-align: center;
+color: #d1d5db;
+margin-top: 20px;
+}
+
+.signup a {
+color: #22c55e;
+text-decoration: none;
+font-weight: bold;
+}
+
+</style>
 
 </head>
 
 <body>
 
-  <div class="login-box">
+<div class="login-box">
 
-    <h2>SABBIR VAI FF SHOP</h2>
+<h2>SABBIR VAI FF SHOP</h2>
 
-    <input
+<input
+type="email"
+id="email"
+placeholder="Enter your email"
+autocomplete="email"
+>
 
-      type="email"
+<input
+type="password"
+id="password"
+placeholder="Enter your password"
+autocomplete="current-password"
+>
 
-      id="email"
+<button id="loginBtn" onclick="login()">
+LOGIN
+</button>
 
-      placeholder="Enter your email"
+<div id="message"></div>
 
-      autocomplete="email"
+<div class="signup">
+Don't have an account?
+<a href="signup.html">Sign Up</a>
+</div>
 
-    >
+</div>
 
-    <input
 
-      type="password"
+<!-- SUPABASE -->
 
-      id="password"
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-      placeholder="Enter your password"
+<script>
 
-      autocomplete="current-password"
+const SUPABASE_URL =
+"https://lqwysworzitvulwpbvwe.supabase.co";
 
-    >
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
 
-    <button id="loginBtn" onclick="login()">
 
-      LOGIN
-
-    </button>
-
-    <div id="message"></div>
-
-    <div class="signup">
-
-      Don't have an account?
-
-      <a href="signup.html">Sign Up</a>
-
-    </div>
-
-  </div>
-
-  <!-- Supabase JavaScript v2 -->
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-
-    // ================================
-
-    // PUT YOUR SUPABASE DETAILS HERE
-
-    // ================================
-
-    const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
-
-   const supabaseClient = supabase.createClient(
+const supabaseClient = supabase.createClient(
 SUPABASE_URL,
 SUPABASE_PUBLISHABLE_KEY,
 {
@@ -241,77 +160,98 @@ detectSessionInUrl: true
 );
 
 
-    // ================================
+// CHECK ALREADY LOGGED IN
 
-    // LOGIN FUNCTION
+async function checkExistingLogin() {
 
-    // ================================
+const { data } =
+await supabaseClient.auth.getSession();
 
-    async function login() {
+if (data.session) {
 
-      const email = document.getElementById("email").value.trim();
+window.location.replace("account.html");
 
-      const password = document.getElementById("password").value;
+}
 
-      const message = document.getElementById("message");
+}
 
-      const button = document.getElementById("loginBtn");
+checkExistingLogin();
 
-      if (!email || !password) {
 
-        message.innerText = "Please enter your email and password.";
+// LOGIN
 
-        return;
+async function login() {
 
-      }
+const email =
+document.getElementById("email").value.trim();
 
-      button.disabled = true;
+const password =
+document.getElementById("password").value;
 
-      button.innerText = "LOGGING IN...";
+const message =
+document.getElementById("message");
 
-      message.innerText = "";
+const button =
+document.getElementById("loginBtn");
 
-      const { data, error } =
 
-        await supabaseClient.auth.signInWithPassword({
+if (!email || !password) {
 
-          email: email,
+message.style.color = "#fbbf24";
+message.innerText =
+"Please enter your email and password.";
 
-          password: password
+return;
 
-        });
+}
 
-      if (error) {
 
-        console.error(error);
+button.disabled = true;
+button.innerText = "LOGGING IN...";
+message.innerText = "";
 
-        message.innerText = error.message;
 
-        button.disabled = false;
+const { data, error } =
+await supabaseClient.auth.signInWithPassword({
 
-        button.innerText = "LOGIN";
+email: email,
+password: password
 
-        return;
+});
 
-      }
 
-      message.style.color = "#22c55e";
+if (error) {
 
-      message.innerText = "Login successful!";
-      const { data: sessionData } = await supabaseClient.auth.getSession();
-alert(sessionData.session ? "SESSION ACHE" : "SESSION NEI");
+console.error(error);
 
-      // Login successful হলে home page-এ যাবে
+message.style.color = "#ef4444";
+message.innerText = error.message;
 
-      setTimeout(() => {
+button.disabled = false;
+button.innerText = "LOGIN";
 
-        window.location.href = "index.html";
+return;
 
-      }, 1000);
+}
 
-    }
 
-  </script>
+if (data.session) {
+
+message.style.color = "#22c55e";
+message.innerText =
+"Login successful!";
+
+setTimeout(() => {
+
+window.location.replace("account.html");
+
+}, 500);
+
+}
+
+}
+
+</script>
 
 </body>
 
