@@ -425,6 +425,69 @@ loggedIn ? "inline" : "none";
 
 updateNavigation();
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
+
+const supabaseClient = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
+
+function hideAll() {
+document.getElementById("homePage").style.display = "none";
+document.getElementById("loginPage").style.display = "none";
+document.getElementById("accountPage").style.display = "none";
+}
+
+function showHome() {
+hideAll();
+document.getElementById("homePage").style.display = "block";
+}
+
+function showLogin() {
+window.location.href = "login.html";
+}
+
+function showRegister() {
+window.location.href = "signup.html";
+}
+
+async function showAccount() {
+const { data: { user } } = await supabaseClient.auth.getUser();
+
+if (!user) {
+window.location.href = "login.html";
+return;
+}
+
+hideAll();
+document.getElementById("accountPage").style.display = "block";
+document.getElementById("userEmail").innerText = user.email;
+}
+
+async function logout() {
+await supabaseClient.auth.signOut();
+updateNavigation();
+showHome();
+}
+
+async function updateNavigation() {
+const { data: { user } } = await supabaseClient.auth.getUser();
+
+document.getElementById("loginNav").style.display =
+user ? "none" : "inline";
+
+document.getElementById("accountNav").style.display =
+user ? "inline" : "none";
+
+document.getElementById("logoutNav").style.display =
+user ? "inline" : "none";
+}
+
+updateNavigation();
 </script>
 
 </body>
