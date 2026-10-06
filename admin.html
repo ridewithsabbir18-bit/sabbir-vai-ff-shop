@@ -1,1 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Admin Panel - SABBIR VAI FF SHOP</title>
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+
+body {
+background: #f4f6f8;
+color: #222;
+}
+
+header {
+background: #111827;
+color: white;
+padding: 18px;
+text-align: center;
+}
+
+header h1 {
+font-size: 24px;
+}
+
+header p {
+margin-top: 5px;
+color: #aaa;
+font-size: 14px;
+}
+
+.container {
+max-width: 900px;
+margin: 25px auto;
+padding: 15px;
+}
+
+.card {
+background: white;
+padding: 20px;
+border-radius: 12px;
+margin-bottom: 20px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+margin-bottom: 15px;
+}
+
+.btn {
+display: inline-block;
+border: none;
+padding: 12px 18px;
+border-radius: 8px;
+cursor: pointer;
+font-size: 15px;
+text-decoration: none;
+margin: 5px 5px 5px 0;
+}
+
+.add {
+background: #16a34a;
+color: white;
+}
+
+.logout {
+background: #dc2626;
+color: white;
+}
+
+.home {
+background: #2563eb;
+color: white;
+}
+
+.product-box {
+border: 1px solid #ddd;
+padding: 15px;
+border-radius: 10px;
+margin-top: 10px;
+}
+
+.product-box h3 {
+margin-bottom: 8px;
+}
+
+.empty {
+color: #777;
+padding: 10px 0;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🛠️ ADMIN PANEL</h1>
+<p>SABBIR VAI FF SHOP</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Admin Dashboard</h2>
+
+<p id="adminEmail">Checking admin...</p>
+
+<br>
+
+<a href="index.html" class="btn home">🏠 Website</a>
+<button onclick="logout()" class="btn logout">Logout</button>
+</div>
+
+<div class="card">
+<h2>📦 Products</h2>
+
+<button onclick="addProduct()" class="btn add">
+➕ Add New Product
+</button>
+
+<div id="products">
+<p class="empty">
+Product management will be added here.
+</p>
+</div>
+</div>
+
+</div>
+
+<script>
+function addProduct() {
+alert("Product Add System will be connected next.");
+}
+
+function logout() {
+alert("Admin logout system will be connected next.");
+}
+</script>
+
+</body>
+</html>
