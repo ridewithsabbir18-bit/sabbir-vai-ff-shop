@@ -1,218 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Admin Panel - SABBIR VAI FF SHOP</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - SABBIR VAI FF SHOP</title>
 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
- <style>
- * {
- box-sizing: border-box;
- margin: 0;
- padding: 0;
- font-family: Arial, sans-serif;
- }
+<style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Arial,sans-serif;
+}
 
- body {
- background: #f4f6f8;
- color: #222;
- }
+body{
+background:#f4f6f8;
+color:#222;
+}
 
- header {
- background: #111827;
- color: white;
- padding: 20px;
- text-align: center;
- }
+header{
+background:#111827;
+color:white;
+padding:20px;
+text-align:center;
+}
 
- header h1 {
- font-size: 24px;
- }
+header h1{
+font-size:24px;
+}
 
- header p {
- margin-top: 6px;
- color: #bbb;
- font-size: 14px;
- }
+header p{
+margin-top:6px;
+color:#bbb;
+font-size:14px;
+}
 
- .container {
- max-width: 900px;
- margin: 25px auto;
- padding: 15px;
- }
+.container{
+max-width:900px;
+margin:25px auto;
+padding:15px;
+}
 
- .card {
- background: white;
- padding: 20px;
- border-radius: 14px;
- margin-bottom: 20px;
- box-shadow: 0 4px 15px rgba(0,0,0,0.08);
- }
+.card{
+background:white;
+padding:20px;
+border-radius:14px;
+margin-bottom:20px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
 
- .card h2 {
- margin-bottom: 15px;
- }
+.card h2{
+margin-bottom:15px;
+}
 
- .email {
- color: #555;
- word-break: break-all;
- }
+.email{
+color:#555;
+word-break:break-all;
+}
 
- button,
- .btn {
- border: none;
- padding: 12px 18px;
- border-radius: 8px;
- cursor: pointer;
- font-size: 15px;
- text-decoration: none;
- display: inline-block;
- margin: 5px 5px 5px 0;
- }
+input,textarea,select{
+width:100%;
+padding:12px;
+margin:7px 0 14px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:15px;
+}
 
- .home {
- background: #2563eb;
- color: white;
- }
+textarea{
+min-height:100px;
+resize:vertical;
+}
 
- .logout {
- background: #dc2626;
- color: white;
- }
+button,.btn{
+border:none;
+padding:12px 18px;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+text-decoration:none;
+display:inline-block;
+margin:5px 5px 5px 0;
+}
 
- .add {
- background: #16a34a;
- color: white;
- }
+.home{
+background:#2563eb;
+color:white;
+}
 
- .status {
- padding: 12px;
- border-radius: 8px;
- background: #fef3c7;
- margin-top: 15px;
- }
- </style>
+.logout{
+background:#dc2626;
+color:white;
+}
+
+.add{
+background:#16a34a;
+color:white;
+}
+
+.status{
+padding:12px;
+border-radius:8px;
+background:#fef3c7;
+margin-top:15px;
+}
+
+.success{
+background:#dcfce7;
+color:#166534;
+}
+
+.error{
+background:#fee2e2;
+color:#991b1b;
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-top:5px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
- <h1>ADMIN PANEL</h1>
- <p>SABBIR VAI FF SHOP</p>
+<h1>ADMIN PANEL</h1>
+<p>SABBIR VAI FF SHOP</p>
 </header>
 
 <div class="container">
 
- <div class="card">
- <h2>Admin Account</h2>
+<div class="card">
 
- <p class="email" id="adminEmail">Checking...</p>
+<h2>Admin Account</h2>
 
- <br>
+<p class="email" id="adminEmail">Checking...</p>
 
- <a href="index.html" class="btn home">Website</a>
- <button onclick="logout()" class="logout">Logout</button>
+<br>
 
- <div class="status" id="status">
- Checking admin permission...
- </div>
- </div>
+<a href="index.html" class="btn home">Website</a>
 
- <div class="card">
- <h2>Product Management</h2>
+<button onclick="logout()" class="logout">
+Logout
+</button>
 
- <button class="add" onclick="addProduct()">
- Add New Product
- </button>
-
- <p style="margin-top:15px;color:#777;">
- Product Add / Edit / Delete system will be connected here.
- </p>
- </div>
+<div class="status" id="status">
+Checking admin permission...
+</div>
 
 </div>
 
+
+<div class="card" id="productCard" style="display:none;">
+
+<h2>➕ Add New Product</h2>
+
+<label>Product Name</label>
+<input
+type="text"
+id="productName"
+placeholder="Example: DOLPHIN PANEL"
+>
+
+<label>Description</label>
+<textarea
+id="productDescription"
+placeholder="Product description"
+></textarea>
+
+<label>Price (৳)</label>
+<input
+type="number"
+id="productPrice"
+placeholder="Example: 500"
+>
+
+<label>Duration</label>
+<input
+type="text"
+id="productDuration"
+placeholder="Example: 7 Days"
+>
+
+<label>Image URL</label>
+<input
+type="text"
+id="productImage"
+placeholder="Image link"
+>
+
+<label>Download URL</label>
+<input
+type="text"
+id="productDownload"
+placeholder="Download / Setup link"
+>
+
+<label>Status</label>
+<select id="productStatus">
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+
+<button class="add" onclick="addProduct()">
+➕ Add Product
+</button>
+
+<div class="status" id="productStatusMessage" style="display:none;"></div>
+
+</div>
+
+</div>
+
+
 <script>
 
-const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co";
+const SUPABASE_URL =
+"https://lqwysworzitvulwpbvwe.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
 "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
 
 const supabaseClient =
 supabase.createClient(
- SUPABASE_URL,
- SUPABASE_PUBLISHABLE_KEY
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
 );
 
-async function checkAdmin() {
 
- const { data: sessionData, error: sessionError } =
- await supabaseClient.auth.getSession();
+async function checkAdmin(){
 
- if (sessionError) {
- document.getElementById("status").innerText =
- " Session error: " + sessionError.message;
- return;
- }
+const { data: sessionData, error: sessionError } =
+await supabaseClient.auth.getSession();
 
- if (!sessionData.session) {
- window.location.href = "login.html";
- return;
- }
+if(sessionError){
 
- const user = sessionData.session.user;
+document.getElementById("status").innerText =
+"❌ Session error: " + sessionError.message;
 
- document.getElementById("adminEmail").innerText =
- user.email;
+return;
+}
 
- const { data, error } =
- await supabaseClient
- .from("admins")
- .select("email")
- .eq("email", user.email)
- .maybeSingle();
+if(!sessionData.session){
 
- if (error) {
+window.location.href = "login.html";
+return;
+}
 
- document.getElementById("status").innerText =
- " Admin check error: " + error.message;
+const user = sessionData.session.user;
 
- document.querySelector(".add").style.display = "none";
+document.getElementById("adminEmail").innerText =
+user.email;
 
- return;
- }
 
- if (!data) {
+const { data, error } =
+await supabaseClient
+.from("admins")
+.select("email")
+.eq("email", user.email)
+.maybeSingle();
 
- document.getElementById("status").innerText =
- " You are not an admin.";
 
- document.querySelector(".add").style.display = "none";
+if(error){
 
- return;
- }
+document.getElementById("status").innerText =
+"❌ Admin check error: " + error.message;
 
- document.getElementById("status").innerText =
- " Admin access confirmed.";
+return;
+}
+
+
+if(!data){
+
+document.getElementById("status").innerText =
+"❌ You are not an admin.";
+
+return;
+}
+
+
+document.getElementById("status").innerText =
+"✅ Admin access confirmed.";
+
+document.getElementById("status").className =
+"status success";
+
+document.getElementById("productCard").style.display =
+"block";
 
 }
 
-async function logout() {
 
- await supabaseClient.auth.signOut();
+async function addProduct(){
 
- window.location.href = "index.html";
+const name =
+document.getElementById("productName").value.trim();
+
+const description =
+document.getElementById("productDescription").value.trim();
+
+const price =
+document.getElementById("productPrice").value;
+
+const duration =
+document.getElementById("productDuration").value.trim();
+
+const image_url =
+document.getElementById("productImage").value.trim();
+
+const download_url =
+document.getElementById("productDownload").value.trim();
+
+const status =
+document.getElementById("productStatus").value;
+
+
+const message =
+document.getElementById("productStatusMessage");
+
+
+if(!name || !price || !duration){
+
+message.style.display = "block";
+
+message.className = "status error";
+
+message.innerText =
+"❌ Product Name, Price এবং Duration দিতে হবে.";
+
+return;
+}
+
+
+const { error } =
+await supabaseClient
+.from("products")
+.insert([
+{
+name: name,
+description: description,
+image_url: image_url,
+download_url: download_url,
+price: Number(price),
+duration: duration,
+status: status
+}
+]);
+
+
+if(error){
+
+message.style.display = "block";
+
+message.className = "status error";
+
+message.innerText =
+"❌ Product add হয়নি: " + error.message;
+
+return;
+}
+
+
+message.style.display = "block";
+
+message.className = "status success";
+
+message.innerText =
+"✅ Product successfully added!";
+
+
+document.getElementById("productName").value = "";
+document.getElementById("productDescription").value = "";
+document.getElementById("productPrice").value = "";
+document.getElementById("productDuration").value = "";
+document.getElementById("productImage").value = "";
+document.getElementById("productDownload").value = "";
+document.getElementById("productStatus").value = "active";
 
 }
 
-function addProduct() {
 
- alert("Product Add System will be added next.");
+async function logout(){
+
+await supabaseClient.auth.signOut();
+
+window.location.href = "index.html";
 
 }
+
 
 checkAdmin();
 
