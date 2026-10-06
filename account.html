@@ -134,15 +134,15 @@ SUPABASE_PUBLISHABLE_KEY
 
 async function checkUser() {
 
-const { data: { user } } =
-await supabaseClient.auth.getUser();
+const { data: sessionData } =
+await supabaseClient.auth.getSession();
 
-if (!user) {
-
+if (!sessionData.session) {
 window.location.href = "login.html";
-
 return;
 }
+
+const user = sessionData.session.user;
 
 document.getElementById("userEmail").innerText =
 user.email;
