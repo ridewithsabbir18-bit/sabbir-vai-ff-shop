@@ -1,1 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Payment - SABBIR VAI FF SHOP</title>
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+
+body {
+background: #0f172a;
+color: white;
+}
+
+header {
+background: #111827;
+padding: 18px 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.logo {
+color: #22c55e;
+font-size: 20px;
+font-weight: bold;
+}
+
+header a {
+color: white;
+text-decoration: none;
+}
+
+.container {
+max-width: 550px;
+margin: 50px auto;
+padding: 20px;
+}
+
+.card {
+background: #1e293b;
+border: 1px solid #334155;
+border-radius: 18px;
+padding: 30px 22px;
+box-shadow: 0 5px 20px rgba(0,0,0,.3);
+}
+
+h1 {
+text-align: center;
+margin-bottom: 25px;
+}
+
+.product {
+text-align: center;
+font-size: 25px;
+font-weight: bold;
+margin-bottom: 25px;
+}
+
+.info {
+background: #0f172a;
+padding: 18px;
+border-radius: 10px;
+margin-bottom: 20px;
+}
+
+.row {
+display: flex;
+justify-content: space-between;
+padding: 10px 0;
+border-bottom: 1px solid #334155;
+}
+
+.row:last-child {
+border-bottom: none;
+}
+
+.label {
+color: #94a3b8;
+}
+
+.value {
+font-weight: bold;
+}
+
+.total {
+color: #22c55e;
+font-size: 28px;
+}
+
+.payment-box {
+text-align: center;
+background: #0f172a;
+padding: 20px;
+border-radius: 10px;
+margin-top: 20px;
+}
+
+.payment-box p {
+color: #94a3b8;
+margin-bottom: 15px;
+}
+
+.payment-btn {
+width: 100%;
+padding: 15px;
+border: none;
+border-radius: 9px;
+background: #22c55e;
+color: #052e16;
+font-size: 17px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.payment-btn:hover {
+background: #16a34a;
+color: white;
+}
+
+footer {
+text-align: center;
+padding: 25px;
+color: #94a3b8;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">SABBIR VAI FF SHOP</div>
+<a href="index.html">← Home</a>
+</header>
+
+
+<div class="container">
+
+<div class="card">
+
+<h1>PAYMENT</h1>
+
+<div class="product">
+🐬 DOLPHIN PANEL
+</div>
+
+<div class="info">
+
+<div class="row">
+<span class="label">Product</span>
+<span class="value">DOLPHIN PANEL</span>
+</div>
+
+<div class="row">
+<span class="label">Duration</span>
+<span class="value" id="days">Loading...</span>
+</div>
+
+<div class="row">
+<span class="label">Total Price</span>
+<span class="value total" id="price">Loading...</span>
+</div>
+
+</div>
+
+
+<div class="payment-box">
+
+<p>
+Your selected package is ready for payment.
+</p>
+
+<button class="payment-btn" onclick="startPayment()">
+PAY NOW
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+© 2026 SABBIR VAI FF SHOP
+</footer>
+
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const product = params.get("product");
+const days = params.get("days");
+const price = params.get("price");
+
+
+// Show selected information
+if (product === "dolphin" && days && price) {
+
+document.getElementById("days").innerText =
+days + " Days";
+
+document.getElementById("price").innerText =
+"৳" + price;
+
+} else {
+
+document.getElementById("days").innerText =
+"Invalid";
+
+document.getElementById("price").innerText =
+"৳0";
+}
+
+
+function startPayment() {
+
+alert(
+"Payment gateway will be connected here next."
+);
+
+}
+
+</script>
+
+</body>
+</html>
