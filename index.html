@@ -36,6 +36,7 @@ nav a {
 color: white;
 text-decoration: none;
 margin-left: 20px;
+cursor: pointer;
 }
 
 .hero {
@@ -66,6 +67,8 @@ color: #111;
 text-decoration: none;
 border-radius: 8px;
 font-weight: bold;
+border: none;
+cursor: pointer;
 }
 
 .products {
@@ -101,11 +104,98 @@ color: #b8c0d9;
 margin-bottom: 20px;
 }
 
+.account {
+display: none;
+padding: 60px 20px;
+min-height: 70vh;
+text-align: center;
+}
+
+.account-box {
+max-width: 420px;
+margin: auto;
+background: #171f35;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #293452;
+}
+
+.account-box h2 {
+margin-bottom: 20px;
+}
+
+.account-box p {
+color: #b8c0d9;
+margin-bottom: 20px;
+}
+
+.login-box {
+display: none;
+padding: 60px 20px;
+min-height: 70vh;
+}
+
+.form-box {
+max-width: 420px;
+margin: auto;
+background: #171f35;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #293452;
+}
+
+.form-box h2 {
+text-align: center;
+margin-bottom: 25px;
+}
+
+.form-box input {
+width: 100%;
+padding: 14px;
+margin-bottom: 15px;
+border-radius: 8px;
+border: 1px solid #293452;
+background: #0f1629;
+color: white;
+outline: none;
+}
+
+.form-box button {
+width: 100%;
+margin-bottom: 15px;
+}
+
+.form-box p {
+text-align: center;
+color: #b8c0d9;
+}
+
+.form-box span {
+color: #ffb703;
+cursor: pointer;
+font-weight: bold;
+}
+
+#userEmail {
+word-break: break-word;
+}
+
 footer {
 text-align: center;
 padding: 25px;
 color: #8e98b5;
 background: #080c18;
+}
+
+@media (max-width: 600px) {
+.hero h1 {
+font-size: 34px;
+}
+
+nav a {
+margin-left: 8px;
+font-size: 14px;
+}
 }
 </style>
 </head>
@@ -116,11 +206,16 @@ background: #080c18;
 <div class="logo">🔥 SABBIR VAI FF SHOP</div>
 
 <nav>
-<a href="#">Home</a>
-<a href="#products">Products</a>
-<a href="#">Login</a>
+<a href="#" onclick="showHome()">Home</a>
+<a href="#products" onclick="showHome()">Products</a>
+<a href="#" id="loginNav" onclick="showLogin()">Login</a>
+<a href="#" id="accountNav" onclick="showAccount()" style="display:none;">My Account</a>
+<a href="#" id="logoutNav" onclick="logout()" style="display:none;">Logout</a>
 </nav>
 </header>
+
+<!-- HOME -->
+<main id="homePage">
 
 <section class="hero">
 <div>
@@ -156,9 +251,181 @@ background: #080c18;
 </div>
 </section>
 
+</main>
+
+<!-- LOGIN / REGISTER -->
+<section class="login-box" id="loginPage">
+
+<div class="form-box">
+
+<h2 id="formTitle">Login</h2>
+
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+
+<button class="btn" onclick="loginUser()">Login</button>
+
+<p id="registerText">
+Don't have an account?
+<span onclick="showRegister()">Register</span>
+</p>
+
+</div>
+
+</section>
+
+<!-- MY ACCOUNT -->
+<section class="account" id="accountPage">
+
+<div class="account-box">
+
+<h2>My Account</h2>
+
+<p>Logged in as:</p>
+<p id="userEmail"></p>
+
+<button class="btn" onclick="logout()">Logout</button>
+
+</div>
+
+</section>
+
 <footer>
 © 2026 SABBIR VAI FF SHOP. All rights reserved.
 </footer>
+
+<script>
+
+let registeredEmail = "";
+let registeredPassword = "";
+
+function hideAll() {
+document.getElementById("homePage").style.display = "none";
+document.getElementById("loginPage").style.display = "none";
+document.getElementById("accountPage").style.display = "none";
+}
+
+function showHome() {
+hideAll();
+document.getElementById("homePage").style.display = "block";
+}
+
+function showLogin() {
+hideAll();
+
+document.getElementById("loginPage").style.display = "block";
+
+document.getElementById("formTitle").innerText = "Login";
+
+document.querySelector(".form-box button").innerText = "Login";
+
+document.querySelector(".form-box button").onclick = loginUser;
+
+document.getElementById("registerText").innerHTML =
+'Don\\'t have an account? <span onclick="showRegister()">Register</span>';
+}
+
+function showRegister() {
+hideAll();
+
+document.getElementById("loginPage").style.display = "block";
+
+document.getElementById("formTitle").innerText = "Create Account";
+
+document.querySelector(".form-box button").innerText = "Register";
+
+document.querySelector(".form-box button").onclick = registerUser;
+
+document.getElementById("registerText").innerHTML =
+'Already have an account? <span onclick="showLogin()">Login</span>';
+}
+
+function registerUser() {
+
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value;
+
+if (!email || !password) {
+alert("Please enter email and password.");
+return;
+}
+
+registeredEmail = email;
+registeredPassword = password;
+
+alert("Registration information saved temporarily. Supabase will be connected next.");
+
+showLogin();
+}
+
+function loginUser() {
+
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value;
+
+if (!email || !password) {
+alert("Please enter email and password.");
+return;
+}
+
+if (email === registeredEmail && password === registeredPassword) {
+
+localStorage.setItem("loggedIn", "true");
+localStorage.setItem("userEmail", email);
+
+updateNavigation();
+showAccount();
+
+} else {
+
+alert("Login failed. Supabase authentication will be connected next.");
+
+}
+}
+
+function showAccount() {
+
+if (localStorage.getItem("loggedIn") !== "true") {
+showLogin();
+return;
+}
+
+hideAll();
+
+document.getElementById("accountPage").style.display = "block";
+
+document.getElementById("userEmail").innerText =
+localStorage.getItem("userEmail");
+}
+
+function logout() {
+
+localStorage.removeItem("loggedIn");
+localStorage.removeItem("userEmail");
+
+updateNavigation();
+showHome();
+
+}
+
+function updateNavigation() {
+
+const loggedIn =
+localStorage.getItem("loggedIn") === "true";
+
+document.getElementById("loginNav").style.display =
+loggedIn ? "none" : "inline";
+
+document.getElementById("accountNav").style.display =
+loggedIn ? "inline" : "none";
+
+document.getElementById("logoutNav").style.display =
+loggedIn ? "inline" : "none";
+}
+
+updateNavigation();
+
+</script>
 
 </body>
 </html>
