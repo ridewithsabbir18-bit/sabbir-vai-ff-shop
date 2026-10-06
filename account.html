@@ -108,7 +108,8 @@ color:#20df8a;
 font-weight:bold;
 }
 
-.order{
+.order,
+.active-product{
 background:#11182d;
 border:1px solid #293452;
 border-radius:10px;
@@ -116,11 +117,13 @@ padding:14px;
 margin-bottom:12px;
 }
 
-.order:last-child{
+.order:last-child,
+.active-product:last-child{
 margin-bottom:0;
 }
 
-.order-row{
+.order-row,
+.product-row{
 display:flex;
 justify-content:space-between;
 gap:12px;
@@ -128,17 +131,32 @@ padding:7px 0;
 border-bottom:1px solid #27304a;
 }
 
-.order-row:last-child{
+.order-row:last-child,
+.product-row:last-child{
 border-bottom:none;
 }
 
-.order-label{
+.order-label,
+.product-label{
 color:#8e98b5;
 }
 
-.order-value{
+.order-value,
+.product-value{
 text-align:right;
 word-break:break-word;
+}
+
+.download-btn{
+display:block;
+text-align:center;
+text-decoration:none;
+background:#20df8a;
+color:#07150e;
+font-weight:bold;
+padding:11px;
+border-radius:7px;
+margin-top:12px;
 }
 
 .btn{
@@ -192,12 +210,14 @@ padding:16px 5%;
 font-size:17px;
 }
 
-.order-row{
+.order-row,
+.product-row{
 flex-direction:column;
 gap:4px;
 }
 
-.order-value{
+.order-value,
+.product-value{
 text-align:left;
 }
 
@@ -269,9 +289,11 @@ Logout
 <h3>My Orders</h3>
 
 <div id="ordersList">
+
 <div class="loading">
 Loading orders...
 </div>
+
 </div>
 
 </div>
@@ -283,8 +305,12 @@ Loading orders...
 
 <h3>Active Products</h3>
 
-<div class="empty">
-No active products yet.
+<div id="activeProductsList">
+
+<div class="loading">
+Loading active products...
+</div>
+
 </div>
 
 </div>
@@ -376,14 +402,16 @@ date.toLocaleDateString();
 }
 
 
-// LOAD ORDERS
+// LOAD DATA
 
 loadOrders(user.id);
+
+loadActiveProducts(user.id);
 
 }
 
 
-// LOAD CUSTOMER ORDERS
+// LOAD ORDERS
 
 async function loadOrders(userId){
 
@@ -492,6 +520,121 @@ ordersList.appendChild(orderBox);
 }
 
 
+// LOAD ACTIVE PRODUCTS
+
+async function loadActiveProducts(userId){
+
+const list =
+document.getElementById("activeProductsList");
+
+
+const { data: products, error } =
+await supabaseClient
+.from("active_products")
+.select("*")
+.eq("user_id", userId)
+.order("created_at", {
+ascending:false
+});
+
+
+if(error){
+
+console.error(error);
+
+list.innerHTML =
+'<div class="empty">Unable to load active products.</div>';
+
+return;
+
+}
+
+
+if(!products || products.length === 0){
+
+list.innerHTML =
+'<div class="empty">No active products yet.</div>';
+
+return;
+
+}
+
+
+list.innerHTML = "";
+
+
+products.forEach(product => {
+
+const box =
+document.createElement("div");
+
+box.className = "active-product";
+
+
+const expiry =
+product.expiry_date
+? new Date(product.expiry_date).toLocaleString()
+: "N/A";
+
+
+let downloadButton = "";
+
+if(product.download_url){
+
+downloadButton = `
+<a
+href="${escapeAttribute(product.download_url)}"
+target="_blank"
+class="download-btn"
+>
+Download / Setup
+</a>
+`;
+
+}
+
+
+box.innerHTML = `
+
+<div class="product-row">
+<span class="product-label">Product</span>
+<span class="product-value">
+${escapeHTML(product.product_name || "N/A")}
+</span>
+</div>
+
+<div class="product-row">
+<span class="product-label">Duration</span>
+<span class="product-value">
+${escapeHTML(product.duration || "N/A")}
+</span>
+</div>
+
+<div class="product-row">
+<span class="product-label">Expiry Date</span>
+<span class="product-value">
+${expiry}
+</span>
+</div>
+
+<div class="product-row">
+<span class="product-label">Status</span>
+<span class="product-value status">
+${escapeHTML(product.status || "Active")}
+</span>
+</div>
+
+${downloadButton}
+
+`;
+
+list.appendChild(box);
+
+});
+
+}
+
+
 // SECURITY
 
 function escapeHTML(value){
@@ -503,6 +646,17 @@ div.textContent =
 String(value);
 
 return div.innerHTML;
+
+}
+
+
+function escapeAttribute(value){
+
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/"/g,"&quot;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
 
 }
 
