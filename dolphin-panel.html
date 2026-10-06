@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DOLPHIN PANEL - SABBIR VAI FF SHOP</title>
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+
+body {
+background: #0f172a;
+color: white;
+}
+
+header {
+background: #111827;
+padding: 18px 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.logo {
+color: #22c55e;
+font-size: 20px;
+font-weight: bold;
+}
+
+header a {
+color: white;
+text-decoration: none;
+}
+
+.container {
+max-width: 600px;
+margin: 50px auto;
+padding: 20px;
+}
+
+.card {
+background: #1e293b;
+border: 1px solid #334155;
+border-radius: 18px;
+padding: 30px 22px;
+text-align: center;
+box-shadow: 0 5px 20px rgba(0,0,0,.3);
+}
+
+.icon {
+font-size: 65px;
+margin-bottom: 15px;
+}
+
+h1 {
+font-size: 30px;
+margin-bottom: 10px;
+}
+
+.description {
+color: #94a3b8;
+margin-bottom: 30px;
+}
+
+.packages {
+display: grid;
+gap: 12px;
+margin-bottom: 25px;
+}
+
+.package {
+background: #0f172a;
+border: 2px solid #334155;
+padding: 17px;
+border-radius: 10px;
+cursor: pointer;
+transition: .2s;
+}
+
+.package:hover,
+.package.active {
+border-color: #22c55e;
+background: #172b25;
+}
+
+.package strong {
+display: block;
+font-size: 18px;
+margin-bottom: 5px;
+}
+
+.package span {
+color: #22c55e;
+font-size: 20px;
+font-weight: bold;
+}
+
+.selected {
+margin: 20px 0;
+padding: 18px;
+background: #0f172a;
+border-radius: 10px;
+}
+
+.selected p {
+color: #94a3b8;
+margin-bottom: 7px;
+}
+
+.selected-price {
+color: #22c55e;
+font-size: 30px;
+font-weight: bold;
+}
+
+.buy-btn {
+width: 100%;
+padding: 15px;
+border: none;
+border-radius: 9px;
+background: #22c55e;
+color: #052e16;
+font-size: 17px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.buy-btn:hover {
+background: #16a34a;
+color: white;
+}
+
+footer {
+text-align: center;
+padding: 25px;
+color: #94a3b8;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">SABBIR VAI FF SHOP</div>
+<a href="index.html">← Home</a>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<div class="icon">🐬</div>
+
+<h1>DOLPHIN PANEL</h1>
+
+<p class="description">
+Select your preferred duration.
+</p>
+
+<div class="packages">
+
+<div class="package active"
+onclick="selectPackage(7, 500, this)">
+<strong>7 Days</strong>
+<span>৳500</span>
+</div>
+
+<div class="package"
+onclick="selectPackage(15, 900, this)">
+<strong>15 Days</strong>
+<span>৳900</span>
+</div>
+
+<div class="package"
+onclick="selectPackage(30, 1500, this)">
+<strong>30 Days</strong>
+<span>৳1500</span>
+</div>
+
+</div>
+
+<div class="selected">
+
+<p>Selected Duration</p>
+
+<strong id="selectedDays">7 Days</strong>
+
+<p style="margin-top:15px;">Price</p>
+
+<div class="selected-price" id="selectedPrice">
+৳500
+</div>
+
+</div>
+
+<button class="buy-btn" onclick="buyNow()">
+CONTINUE TO PAYMENT
+</button>
+
+</div>
+
+</div>
+
+<footer>
+© 2026 SABBIR VAI FF SHOP
+</footer>
+
+
+<script>
+
+let selectedDays = 7;
+let selectedPrice = 500;
+
+function selectPackage(days, price, element) {
+
+selectedDays = days;
+selectedPrice = price;
+
+document.getElementById("selectedDays").innerText =
+days + " Days";
+
+document.getElementById("selectedPrice").innerText =
+"৳" + price;
+
+document.querySelectorAll(".package").forEach(function(item) {
+item.classList.remove("active");
+});
+
+element.classList.add("active");
+}
+
+
+function buyNow() {
+
+window.location.href =
+"payment.html?product=dolphin&days=" +
+selectedDays +
+"&price=" +
+selectedPrice;
+
+}
+
+</script>
+
+</body>
+</html>
