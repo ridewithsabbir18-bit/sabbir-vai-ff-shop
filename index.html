@@ -180,7 +180,7 @@ font-size: 30px;
 <nav>
 <a href="index.html">Home</a>
 <a href="#products">Products</a>
-<a href="login.html">Login</a>
+<a href="#" onclick="goToLogin()">Login</a>
 <a href="account.html">My Account</a>
 </nav>
 </header>
@@ -232,6 +232,36 @@ BUY NOW
 <footer>
 <p>© 2026 SABBIR VAI FF SHOP</p>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+ const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co";
+ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
+
+const supabaseClient = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY,
+{
+auth: {
+persistSession: true,
+autoRefreshToken: true,
+detectSessionInUrl: true
+}
+}
+);
+
+async function goToLogin() {
+
+const { data } = await supabaseClient.auth.getSession();
+
+if (data.session) {
+window.location.href = "account.html";
+} else {
+window.location.href = "login.html";
+}
+
+}
+</script>
 
 </body>
 </html>
