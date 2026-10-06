@@ -188,6 +188,13 @@ text-align:center;
 padding:15px 0;
 }
 
+.error{
+color:#ff6b6b;
+text-align:center;
+padding:15px 0;
+word-break:break-word;
+}
+
 footer{
 text-align:center;
 padding:25px;
@@ -349,8 +356,8 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
 "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
 
-
-const supabaseClient = supabase.createClient(
+const supabaseClient =
+supabase.createClient(
 SUPABASE_URL,
 SUPABASE_PUBLISHABLE_KEY
 );
@@ -360,8 +367,17 @@ SUPABASE_PUBLISHABLE_KEY
 
 async function checkUser(){
 
-const { data: sessionData } =
+const { data: sessionData, error } =
 await supabaseClient.auth.getSession();
+
+if(error){
+
+console.error(error);
+
+window.location.href="login.html";
+return;
+
+}
 
 if(!sessionData.session){
 
@@ -374,7 +390,7 @@ const user =
 sessionData.session.user;
 
 
-// EMAIL
+// PROFILE
 
 document.getElementById("userEmail").innerText =
 user.email || "N/A";
@@ -382,11 +398,8 @@ user.email || "N/A";
 document.getElementById("welcomeEmail").innerText =
 user.email || "N/A";
 
-
-// CUSTOMER ID
-
 document.getElementById("customerId").innerText =
-user.id;
+user.id || "N/A";
 
 
 // ACCOUNT CREATED
@@ -404,9 +417,9 @@ date.toLocaleDateString();
 
 // LOAD DATA
 
-loadOrders(user.id);
+await loadOrders(user.id);
 
-loadActiveProducts(user.id);
+await loadActiveProducts(user.id);
 
 }
 
@@ -417,7 +430,6 @@ async function loadOrders(userId){
 
 const ordersList =
 document.getElementById("ordersList");
-
 
 const { data: orders, error } =
 await supabaseClient
@@ -431,10 +443,15 @@ ascending:false
 
 if(error){
 
-console.error(error);
+console.error("ORDER ERROR:",error);
 
 ordersList.innerHTML =
-'<div class="empty">Unable to load orders.</div>';
+`
+<div class="error">
+Unable to load orders.<br>
+${escapeHTML(error.message)}
+</div>
+`;
 
 return;
 
@@ -459,12 +476,14 @@ orders.forEach(order => {
 const orderBox =
 document.createElement("div");
 
-orderBox.className = "order";
+orderBox.className =
+"order";
 
 
 const date =
 order.created_at
-? new Date(order.created_at).toLocaleDateString()
+? new Date(order.created_at)
+.toLocaleDateString()
 : "N/A";
 
 
@@ -472,22 +491,30 @@ orderBox.innerHTML = `
 
 <div class="order-row">
 <span class="order-label">Product</span>
-<span class="order-value">${escapeHTML(order.product_name || "N/A")}</span>
+<span class="order-value">
+${escapeHTML(order.product_name || "N/A")}
+</span>
 </div>
 
 <div class="order-row">
 <span class="order-label">Package</span>
-<span class="order-value">${escapeHTML(order.duration || "N/A")}</span>
+<span class="order-value">
+${escapeHTML(order.duration || "N/A")}
+</span>
 </div>
 
 <div class="order-row">
 <span class="order-label">Price</span>
-<span class="order-value">৳${order.price ?? "0"}</span>
+<span class="order-value">
+৳${order.price ?? "0"}
+</span>
 </div>
 
 <div class="order-row">
 <span class="order-label">Order Date</span>
-<span class="order-value">${date}</span>
+<span class="order-value">
+${date}
+</span>
 </div>
 
 <div class="order-row">
@@ -540,10 +567,18 @@ ascending:false
 
 if(error){
 
-console.error(error);
+console.error(
+"ACTIVE PRODUCT ERROR:",
+error
+);
 
 list.innerHTML =
-'<div class="empty">Unable to load active products.</div>';
+`
+<div class="error">
+Database Error:<br>
+${escapeHTML(error.message)}
+</div>
+`;
 
 return;
 
@@ -553,7 +588,11 @@ return;
 if(!products || products.length === 0){
 
 list.innerHTML =
-'<div class="empty">No active products yet.</div>';
+`
+<div class="empty">
+Database থেকে কোনো active product পাওয়া যায়নি।
+</div>
+`;
 
 return;
 
@@ -568,27 +607,33 @@ products.forEach(product => {
 const box =
 document.createElement("div");
 
-box.className = "active-product";
+box.className =
+"active-product";
 
 
 const expiry =
 product.expiry_date
-? new Date(product.expiry_date).toLocaleString()
+? new Date(product.expiry_date)
+.toLocaleString()
 : "N/A";
 
 
 let downloadButton = "";
 
+
 if(product.download_url){
 
 downloadButton = `
+
 <a
 href="${escapeAttribute(product.download_url)}"
 target="_blank"
+rel="noopener noreferrer"
 class="download-btn"
 >
 Download / Setup
 </a>
+
 `;
 
 }
@@ -597,36 +642,66 @@ Download / Setup
 box.innerHTML = `
 
 <div class="product-row">
-<span class="product-label">Product</span>
-<span class="product-value">
-${escapeHTML(product.product_name || "N/A")}
+
+<span class="product-label">
+Product
 </span>
+
+<span class="product-value">
+${escapeHTML(
+product.product_name || "N/A"
+)}
+</span>
+
 </div>
 
-<div class="product-row">
-<span class="product-label">Duration</span>
-<span class="product-value">
-${escapeHTML(product.duration || "N/A")}
-</span>
-</div>
 
 <div class="product-row">
-<span class="product-label">Expiry Date</span>
+
+<span class="product-label">
+Duration
+</span>
+
+<span class="product-value">
+${escapeHTML(
+product.duration || "N/A"
+)}
+</span>
+
+</div>
+
+
+<div class="product-row">
+
+<span class="product-label">
+Expiry Date
+</span>
+
 <span class="product-value">
 ${expiry}
 </span>
+
 </div>
 
+
 <div class="product-row">
-<span class="product-label">Status</span>
-<span class="product-value status">
-${escapeHTML(product.status || "Active")}
+
+<span class="product-label">
+Status
 </span>
+
+<span class="product-value status">
+${escapeHTML(
+product.status || "Active"
+)}
+</span>
+
 </div>
 
 ${downloadButton}
 
 `;
+
 
 list.appendChild(box);
 
@@ -674,15 +749,22 @@ return;
 
 if(newPassword.length < 6){
 
-alert("Password must be at least 6 characters.");
+alert(
+"Password must be at least 6 characters."
+);
+
 return;
 
 }
 
+
 const { error } =
 await supabaseClient.auth.updateUser({
+
 password:newPassword
+
 });
+
 
 if(error){
 
@@ -690,7 +772,9 @@ alert(error.message);
 
 }else{
 
-alert("Password changed successfully!");
+alert(
+"Password changed successfully!"
+);
 
 }
 
@@ -703,10 +787,13 @@ async function logout(){
 
 await supabaseClient.auth.signOut();
 
-window.location.href="index.html";
+window.location.href =
+"index.html";
 
 }
 
+
+// START
 
 checkUser();
 
