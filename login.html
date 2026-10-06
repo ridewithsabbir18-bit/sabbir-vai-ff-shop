@@ -228,13 +228,18 @@
 
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
 
-    const supabaseClient = window.supabase.createClient(
+   const supabaseClient = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY,
+{
+auth: {
+persistSession: true,
+autoRefreshToken: true,
+detectSessionInUrl: true
+}
+}
+);
 
-      SUPABASE_URL,
-
-      SUPABASE_PUBLISHABLE_KEY
-
-    );
 
     // ================================
 
