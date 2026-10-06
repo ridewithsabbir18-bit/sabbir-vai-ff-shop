@@ -6,6 +6,8 @@
 
 <title>Product - SABBIR VAI FF SHOP</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 * {
 margin: 0;
@@ -17,87 +19,99 @@ font-family: Arial, sans-serif;
 body {
 background: #0f172a;
 color: white;
+min-height: 100vh;
 }
 
 header {
-background: #111827;
+background: #020617;
 padding: 18px 20px;
-display: flex;
-justify-content: space-between;
-align-items: center;
+text-align: center;
+border-bottom: 1px solid #1e293b;
 }
 
-.logo {
+header h1 {
 color: #22c55e;
-font-size: 20px;
-font-weight: bold;
-}
-
-header a {
-color: white;
-text-decoration: none;
+font-size: 24px;
 }
 
 .container {
-max-width: 600px;
-margin: 40px auto;
-padding: 20px;
+width: 92%;
+max-width: 700px;
+margin: 30px auto;
 }
 
-.card {
-background: #1e293b;
-border: 1px solid #334155;
-border-radius: 15px;
+.product-card {
+background: #111827;
+border: 1px solid #1f2937;
+border-radius: 16px;
 padding: 25px;
 text-align: center;
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .product-image {
-width: 120px;
-height: 120px;
-margin: auto;
-background: #0f172a;
-border-radius: 20px;
+width: 130px;
+height: 130px;
+object-fit: cover;
+border-radius: 15px;
+margin-bottom: 15px;
+background: #1e293b;
+}
+
+.emoji-image {
+width: 130px;
+height: 130px;
 display: flex;
 align-items: center;
 justify-content: center;
-font-size: 55px;
-overflow: hidden;
+font-size: 70px;
+margin: 0 auto 15px;
+background: #1e293b;
+border-radius: 15px;
 }
 
-.product-image img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-}
-
-h1 {
-margin: 20px 0 10px;
+h2 {
+color: #22c55e;
+margin-bottom: 10px;
 }
 
 .description {
-color: #94a3b8;
+color: #cbd5e1;
+margin-bottom: 25px;
+line-height: 1.6;
+}
+
+.package-title {
+font-size: 20px;
+margin-bottom: 15px;
+}
+
+.packages {
+display: grid;
+gap: 12px;
 margin-bottom: 25px;
 }
 
 .package {
-background: #0f172a;
-border: 1px solid #334155;
-border-radius: 10px;
+background: #1e293b;
+border: 2px solid #334155;
+border-radius: 12px;
 padding: 15px;
-margin: 10px 0;
 cursor: pointer;
+transition: 0.2s;
+text-align: left;
 }
 
 .package:hover {
 border-color: #22c55e;
 }
 
-.package.active {
-border: 2px solid #22c55e;
+.package.selected {
+border-color: #22c55e;
+background: #172554;
 }
 
-.package-title {
+.package-name {
 font-size: 18px;
 font-weight: bold;
 }
@@ -111,339 +125,261 @@ margin-top: 5px;
 
 .buy-btn {
 width: 100%;
+padding: 15px;
 border: none;
+border-radius: 10px;
 background: #22c55e;
-color: #052e16;
-padding: 14px;
-border-radius: 8px;
-font-size: 16px;
+color: #020617;
+font-size: 18px;
 font-weight: bold;
-margin-top: 20px;
 cursor: pointer;
 }
 
 .buy-btn:hover {
 background: #16a34a;
-color: white;
 }
 
-.loading {
+.message {
 text-align: center;
-color: #94a3b8;
-}
-
-.error {
-text-align: center;
-color: #ef4444;
-}
-
-.selected {
-margin-top: 18px;
+padding: 30px;
 color: #cbd5e1;
 }
 
+.error {
+color: #ef4444;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-
-<div class="logo">
-SABBIR VAI FF SHOP
-</div>
-
-<a href="index.html">
-Home
-</a>
-
+<h1>SABBIR VAI FF SHOP</h1>
 </header>
-
 
 <div class="container">
 
-<div id="content">
-
-<div class="loading">
+<div id="loading" class="message">
 Loading product...
 </div>
 
+<div id="productBox" class="product-card" style="display:none;">
+
+<div id="imageBox"></div>
+
+<h2 id="productName"></h2>
+
+<p id="productDescription" class="description"></p>
+
+<div class="package-title">
+Select Package
+</div>
+
+<div id="packages" class="packages"></div>
+
+<button class="buy-btn" onclick="continuePayment()">
+BUY NOW
+</button>
+
 </div>
 
 </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const SUPABASE_URL =
-"https://lqwysworzitvulwpbvwe.supabase.co";
+const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
 "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
 
-const supabaseClient =
-supabase.createClient(
+const supabaseClient = supabase.createClient(
 SUPABASE_URL,
 SUPABASE_PUBLISHABLE_KEY
 );
 
 
-// Get product ID from URL
+let selectedPackage = null;
+let product = null;
 
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const productId =
-params.get("id");
-
-
-let productData = null;
-
-let selectedDays = "7 Days";
-
-let selectedPrice = 500;
-
-
-// Load product
 
 async function loadProduct() {
 
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
 if (!productId) {
-
-document.getElementById("content").innerHTML = `
-<div class="error">
-Product not found.
-</div>
-`;
-
+showError("Product ID not found.");
 return;
-
 }
 
 
-const { data, error } =
+// Load product
+const { data: productData, error: productError } =
 await supabaseClient
-
 .from("products")
-
 .select("*")
-
 .eq("id", productId)
-
 .single();
 
 
-if (error || !data) {
-
-document.getElementById("content").innerHTML = `
-<div class="error">
-Unable to load product.
-</div>
-`;
-
+if (productError || !productData) {
+console.error(productError);
+showError("Product not found.");
 return;
-
 }
 
 
-productData = data;
+product = productData;
 
 
-// Show product
+document.getElementById("productName").textContent =
+product.name || "Product";
 
-let imageHTML = "🐬";
+
+document.getElementById("productDescription").textContent =
+product.description || "";
 
 
-if (data.image_url) {
+// Product image
+const imageBox = document.getElementById("imageBox");
 
-imageHTML = `
+if (product.image_url) {
+
+imageBox.innerHTML = `
 <img
-src="${escapeHTML(data.image_url)}"
-alt="Product"
+src="${product.image_url}"
+class="product-image"
+alt="${product.name}"
 >
+`;
+
+} else {
+
+imageBox.innerHTML = `
+<div class="emoji-image">🐬</div>
 `;
 
 }
 
 
-document.getElementById("content").innerHTML = `
-
-<div class="card">
-
-<div class="product-image">
-
-${imageHTML}
-
-</div>
+// Load packages
+const { data: packages, error: packageError } =
+await supabaseClient
+.from("product_packages")
+.select("*")
+.eq("product_id", product.id)
+.order("price", { ascending: true });
 
 
-<h1>
-${escapeHTML(data.name)}
-</h1>
-
-
-<div class="description">
-
-${escapeHTML(
-data.description ||
-"Premium Free Fire Panel"
-)}
-
-</div>
-
-
-<div
-class="package active"
-onclick="selectPackage('7 Days', 500, this)"
->
-
-<div class="package-title">
-7 Days
-</div>
-
-<div class="package-price">
-৳500
-</div>
-
-</div>
-
-
-<div
-class="package"
-onclick="selectPackage('15 Days', 900, this)"
->
-
-<div class="package-title">
-15 Days
-</div>
-
-<div class="package-price">
-৳900
-</div>
-
-</div>
-
-
-<div
-class="package"
-onclick="selectPackage('30 Days', 1500, this)"
->
-
-<div class="package-title">
-30 Days
-</div>
-
-<div class="package-price">
-৳1500
-</div>
-
-</div>
-
-
-<div class="selected">
-
-Selected:
-<span id="selectedDays">
-7 Days
-</span>
-
-<br>
-
-Price:
-৳<span id="selectedPrice">
-500
-</span>
-
-</div>
-
-
-<button
-class="buy-btn"
-onclick="continuePayment()"
->
-CONTINUE TO PAYMENT
-</button>
-
-
-</div>
-
-`;
-
+if (packageError) {
+console.error(packageError);
+showError("Package load failed.");
+return;
 }
 
 
-// Select package
+const packagesBox = document.getElementById("packages");
 
-function selectPackage(
-days,
-price,
-element
-) {
+packagesBox.innerHTML = "";
 
-selectedDays = days;
 
-selectedPrice = price;
+if (!packages || packages.length === 0) {
 
+packagesBox.innerHTML = `
+<p class="message">
+No package available.
+</p>
+`;
+
+} else {
+
+packages.forEach((pkg, index) => {
+
+const div = document.createElement("div");
+
+div.className = "package";
+
+div.innerHTML = `
+<div class="package-name">
+${pkg.duration}
+</div>
+
+<div class="package-price">
+৳${pkg.price}
+</div>
+`;
+
+
+div.addEventListener("click", function() {
 
 document
 .querySelectorAll(".package")
 .forEach(item => {
+item.classList.remove("selected");
+});
 
-item.classList.remove("active");
+
+div.classList.add("selected");
+
+selectedPackage = pkg;
 
 });
 
 
-element.classList.add("active");
+packagesBox.appendChild(div);
 
 
-document.getElementById(
-"selectedDays"
-).textContent = days;
+// First package selected automatically
+if (index === 0) {
 
+div.classList.add("selected");
 
-document.getElementById(
-"selectedPrice"
-).textContent = price;
+selectedPackage = pkg;
+
+}
+
+});
 
 }
 
 
-// Continue payment
+document.getElementById("loading").style.display = "none";
+
+document.getElementById("productBox").style.display = "block";
+
+}
+
 
 function continuePayment() {
 
+if (!selectedPackage) {
+
+alert("Please select a package first.");
+
+return;
+}
+
+
+const productName =
+encodeURIComponent(product.name);
+
+const days =
+encodeURIComponent(selectedPackage.duration);
+
+const price =
+encodeURIComponent(selectedPackage.price);
+
+
 window.location.href =
-"payment.html" +
-"?product=" +
-encodeURIComponent(productData.name) +
-"&days=" +
-encodeURIComponent(selectedDays) +
-"&price=" +
-encodeURIComponent(selectedPrice);
+`payment.html?product=${productName}&days=${days}&price=${price}`;
 
 }
 
 
-// HTML security
+function showError(message) {
 
-function escapeHTML(value) {
-
-return String(value)
-
-.replace(/&/g, "&amp;")
-
-.replace(/</g, "&lt;")
-
-.replace(/>/g, "&gt;")
-
-.replace(/"/g, "&quot;")
-
-.replace(/'/g, "&#039;");
+document.getElementById("loading").innerHTML =
+`<div class="error">${message}</div>`;
 
 }
 
