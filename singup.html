@@ -1,1 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - SABBIR VAI FF SHOP</title>
 
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+
+body {
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+background: #111827;
+padding: 20px;
+}
+
+.signup-box {
+width: 100%;
+max-width: 400px;
+background: #1f2937;
+padding: 30px;
+border-radius: 16px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+h2 {
+color: white;
+text-align: center;
+margin-bottom: 25px;
+}
+
+input {
+width: 100%;
+padding: 14px;
+margin-bottom: 15px;
+border: 1px solid #374151;
+border-radius: 8px;
+background: #111827;
+color: white;
+outline: none;
+}
+
+input:focus {
+border-color: #22c55e;
+}
+
+button {
+width: 100%;
+padding: 14px;
+border: none;
+border-radius: 8px;
+background: #22c55e;
+color: white;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+}
+
+button:hover {
+background: #16a34a;
+}
+
+button:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+}
+
+#message {
+text-align: center;
+margin-top: 15px;
+color: #fbbf24;
+font-size: 14px;
+}
+
+.login {
+text-align: center;
+color: #d1d5db;
+margin-top: 20px;
+}
+
+.login a {
+color: #22c55e;
+text-decoration: none;
+font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="signup-box">
+
+<h2>Create Account</h2>
+
+<input
+type="email"
+id="email"
+placeholder="Enter your email"
+autocomplete="email"
+>
+
+<input
+type="password"
+id="password"
+placeholder="Create password"
+autocomplete="new-password"
+>
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm password"
+autocomplete="new-password"
+>
+
+<button id="signupBtn" onclick="signup()">
+SIGN UP
+</button>
+
+<div id="message"></div>
+
+<div class="login">
+Already have an account?
+<a href="login.html">Login</a>
+</div>
+
+</div>
+
+<!-- Supabase JavaScript v2 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+// ================================
+// YOUR SUPABASE DETAILS
+// ================================
+
+const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
+
+const supabaseClient = window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
+
+
+// ================================
+// SIGN UP FUNCTION
+// ================================
+
+async function signup() {
+
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value;
+const confirmPassword =
+document.getElementById("confirmPassword").value;
+
+const message = document.getElementById("message");
+const button = document.getElementById("signupBtn");
+
+if (!email || !password || !confirmPassword) {
+message.innerText = "Please fill in all fields.";
+return;
+}
+
+if (password.length < 6) {
+message.innerText =
+"Password must be at least 6 characters.";
+return;
+}
+
+if (password !== confirmPassword) {
+message.innerText = "Passwords do not match.";
+return;
+}
+
+button.disabled = true;
+button.innerText = "CREATING ACCOUNT...";
+message.innerText = "";
+
+const { data, error } =
+await supabaseClient.auth.signUp({
+email: email,
+password: password
+});
+
+if (error) {
+
+console.error(error);
+
+message.innerText = error.message;
+
+button.disabled = false;
+button.innerText = "SIGN UP";
+
+return;
+}
+
+message.style.color = "#22c55e";
+
+if (data.session) {
+message.innerText = "Account created successfully!";
+
+setTimeout(() => {
+window.location.href = "index.html";
+}, 1000);
+
+} else {
+message.innerText =
+"Account created! Please check your email to verify your account.";
+
+button.disabled = false;
+button.innerText = "SIGN UP";
+}
+}
+
+</script>
+
+</body>
+</html>
