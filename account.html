@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Account - SABBIR VAI FF SHOP</title>
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+
+body {
+background: #0b1020;
+color: white;
+}
+
+.header {
+padding: 20px 7%;
+background: #11182d;
+border-bottom: 1px solid #27304a;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.logo {
+font-size: 22px;
+font-weight: bold;
+}
+
+.home-btn {
+color: white;
+text-decoration: none;
+}
+
+.account {
+min-height: 80vh;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 30px 20px;
+}
+
+.account-box {
+width: 100%;
+max-width: 420px;
+background: #171f35;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #293452;
+text-align: center;
+}
+
+.account-box h2 {
+margin-bottom: 25px;
+}
+
+.email {
+color: #b8c0d9;
+margin-bottom: 25px;
+word-break: break-word;
+}
+
+.btn {
+width: 100%;
+padding: 14px;
+background: #ffb703;
+color: #111;
+border: none;
+border-radius: 8px;
+font-weight: bold;
+cursor: pointer;
+}
+
+footer {
+text-align: center;
+padding: 25px;
+color: #8e98b5;
+background: #080c18;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+<div class="logo">🔥 SABBIR VAI FF SHOP</div>
+
+<a href="index.html" class="home-btn">Home</a>
+
+</header>
+
+<section class="account">
+
+<div class="account-box">
+
+<h2>My Account</h2>
+
+<p class="email" id="userEmail">
+Loading...
+</p>
+
+<button class="btn" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</section>
+
+<footer>
+© 2026 SABBIR VAI FF SHOP. All rights reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co/";
+
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2
+";
+
+const supabaseClient = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
+
+async function checkUser() {
+
+const { data: { user } } =
+await supabaseClient.auth.getUser();
+
+if (!user) {
+
+window.location.href = "login.html";
+
+return;
+}
+
+document.getElementById("userEmail").innerText =
+user.email;
+}
+
+async function logout() {
+
+await supabaseClient.auth.signOut();
+
+window.location.href = "index.html";
+}
+
+checkUser();
+
+</script>
+
+</body>
+</html>
