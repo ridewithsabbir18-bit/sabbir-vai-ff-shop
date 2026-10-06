@@ -99,20 +99,20 @@
 <body>
 
 <header>
- <h1> ADMIN PANEL</h1>
+ <h1>ADMIN PANEL</h1>
  <p>SABBIR VAI FF SHOP</p>
 </header>
 
 <div class="container">
 
  <div class="card">
- <h2> Admin Account</h2>
+ <h2>Admin Account</h2>
 
  <p class="email" id="adminEmail">Checking...</p>
 
  <br>
 
- <a href="index.html" class="btn home"> Website</a>
+ <a href="index.html" class="btn home">Website</a>
  <button onclick="logout()" class="logout">Logout</button>
 
  <div class="status" id="status">
@@ -121,7 +121,7 @@
  </div>
 
  <div class="card">
- <h2> Product Management</h2>
+ <h2>Product Management</h2>
 
  <button class="add" onclick="addProduct()">
  Add New Product
@@ -137,15 +137,26 @@
 <script>
 
 const SUPABASE_URL = "https://lqwysworzitvulwpbvwe.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
 
- const supabaseClient =
- supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2";
 
- async function checkAdmin() {
+const supabaseClient =
+supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_PUBLISHABLE_KEY
+);
 
- const { data: sessionData } =
+async function checkAdmin() {
+
+ const { data: sessionData, error: sessionError } =
  await supabaseClient.auth.getSession();
+
+ if (sessionError) {
+ document.getElementById("status").innerText =
+ " Session error: " + sessionError.message;
+ return;
+ }
 
  if (!sessionData.session) {
  window.location.href = "login.html";
@@ -164,7 +175,17 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2
  .eq("email", user.email)
  .maybeSingle();
 
- if (error || !data) {
+ if (error) {
+
+ document.getElementById("status").innerText =
+ " Admin check error: " + error.message;
+
+ document.querySelector(".add").style.display = "none";
+
+ return;
+ }
+
+ if (!data) {
 
  document.getElementById("status").innerText =
  " You are not an admin.";
@@ -176,24 +197,24 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dX32O3XdjpI4ws7Jqz_DSQ_WBOpAzG2
 
  document.getElementById("status").innerText =
  " Admin access confirmed.";
- }
 
+}
 
- async function logout() {
+async function logout() {
 
  await supabaseClient.auth.signOut();
 
  window.location.href = "index.html";
- }
 
+}
 
- function addProduct() {
+function addProduct() {
 
  alert("Product Add System will be added next.");
- }
 
+}
 
- checkAdmin();
+checkAdmin();
 
 </script>
 
