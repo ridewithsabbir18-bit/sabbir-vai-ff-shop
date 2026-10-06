@@ -17,6 +17,7 @@ font-family: Arial, sans-serif;
 body {
 background: #0f172a;
 color: white;
+min-height: 100vh;
 }
 
 header {
@@ -25,6 +26,7 @@ padding: 18px 20px;
 display: flex;
 justify-content: space-between;
 align-items: center;
+border-bottom: 1px solid #1e293b;
 }
 
 .logo {
@@ -75,7 +77,9 @@ margin-bottom: 20px;
 .row {
 display: flex;
 justify-content: space-between;
-padding: 10px 0;
+align-items: center;
+gap: 15px;
+padding: 12px 0;
 border-bottom: 1px solid #334155;
 }
 
@@ -89,6 +93,8 @@ color: #94a3b8;
 
 .value {
 font-weight: bold;
+text-align: right;
+word-break: break-word;
 }
 
 .total {
@@ -131,6 +137,12 @@ text-align: center;
 padding: 25px;
 color: #94a3b8;
 }
+
+.error {
+color: #ef4444;
+text-align: center;
+padding: 20px;
+}
 </style>
 </head>
 
@@ -169,8 +181,8 @@ SABBIR VAI FF SHOP
 Product
 </span>
 
-<span class="value">
-DOLPHIN PANEL
+<span class="value" id="productName">
+Loading...
 </span>
 
 </div>
@@ -210,7 +222,6 @@ Loading...
 Your selected package is ready for payment.
 </p>
 
-
 <button
 class="payment-btn"
 onclick="startPayment()"
@@ -226,9 +237,7 @@ PAY NOW
 
 
 <footer>
-
 © 2026 SABBIR VAI FF SHOP
-
 </footer>
 
 
@@ -240,32 +249,50 @@ const params = new URLSearchParams(
 window.location.search
 );
 
-
 const product = params.get("product");
-
-const days = params.get("days");
-
+const duration = params.get("days");
 const price = params.get("price");
 
 
-// Check selected package
+// Check package information
 
-if (product && days && price) {
+if (
+product !== null &&
+duration !== null &&
+price !== null &&
+product !== "" &&
+duration !== "" &&
+price !== ""
+) {
+
+// Product
+document.getElementById("productName").innerText =
+product;
+
+
+// Duration
+// Whatever is written in Admin Panel
+// will be shown exactly as it is
 
 document.getElementById("days").innerText =
-days;
+duration;
+
+
+// Price
 
 document.getElementById("price").innerText =
 "৳" + price;
 
 } else {
 
+document.getElementById("productName").innerText =
+"Invalid";
+
 document.getElementById("days").innerText =
 "Invalid";
 
 document.getElementById("price").innerText =
 "৳0";
-
 }
 
 
