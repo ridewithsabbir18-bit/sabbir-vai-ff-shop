@@ -62,6 +62,7 @@ text-align: center;
 font-size: 25px;
 font-weight: bold;
 margin-bottom: 25px;
+color: #22c55e;
 }
 
 .info {
@@ -136,8 +137,15 @@ color: #94a3b8;
 <body>
 
 <header>
-<div class="logo">SABBIR VAI FF SHOP</div>
-<a href="index.html">← Home</a>
+
+<div class="logo">
+SABBIR VAI FF SHOP
+</div>
+
+<a href="index.html">
+← Home
+</a>
+
 </header>
 
 
@@ -147,25 +155,50 @@ color: #94a3b8;
 
 <h1>PAYMENT</h1>
 
+
 <div class="product">
 🐬 DOLPHIN PANEL
 </div>
 
+
 <div class="info">
 
 <div class="row">
-<span class="label">Product</span>
-<span class="value">DOLPHIN PANEL</span>
+
+<span class="label">
+Product
+</span>
+
+<span class="value">
+DOLPHIN PANEL
+</span>
+
 </div>
 
-<div class="row">
-<span class="label">Duration</span>
-<span class="value" id="days">Loading...</span>
-</div>
 
 <div class="row">
-<span class="label">Total Price</span>
-<span class="value total" id="price">Loading...</span>
+
+<span class="label">
+Duration
+</span>
+
+<span class="value" id="days">
+Loading...
+</span>
+
+</div>
+
+
+<div class="row">
+
+<span class="label">
+Total Price
+</span>
+
+<span class="value total" id="price">
+Loading...
+</span>
+
 </div>
 
 </div>
@@ -177,7 +210,11 @@ color: #94a3b8;
 Your selected package is ready for payment.
 </p>
 
-<button class="payment-btn" onclick="startPayment()">
+
+<button
+class="payment-btn"
+onclick="startPayment()"
+>
 PAY NOW
 </button>
 
@@ -189,24 +226,34 @@ PAY NOW
 
 
 <footer>
+
 © 2026 SABBIR VAI FF SHOP
+
 </footer>
 
 
 <script>
 
-const params = new URLSearchParams(window.location.search);
+// Get information from URL
+
+const params = new URLSearchParams(
+window.location.search
+);
+
 
 const product = params.get("product");
+
 const days = params.get("days");
+
 const price = params.get("price");
 
 
-// Show selected information
-if (product === "dolphin" && days && price) {
+// Check selected package
+
+if (product && days && price) {
 
 document.getElementById("days").innerText =
-days + " Days";
+days;
 
 document.getElementById("price").innerText =
 "৳" + price;
@@ -218,8 +265,11 @@ document.getElementById("days").innerText =
 
 document.getElementById("price").innerText =
 "৳0";
+
 }
 
+
+// Payment button
 
 function startPayment() {
 
