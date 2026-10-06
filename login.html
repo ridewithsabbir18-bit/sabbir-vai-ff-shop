@@ -298,6 +298,8 @@ detectSessionInUrl: true
       message.style.color = "#22c55e";
 
       message.innerText = "Login successful!";
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+alert(sessionData.session ? "SESSION ACHE" : "SESSION NEI");
 
       // Login successful হলে home page-এ যাবে
 
